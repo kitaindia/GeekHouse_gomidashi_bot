@@ -1,0 +1,27 @@
+<h1>Listing members</h1>
+jyunbanは半角数字で、1〜nまで順番に振ってね。<br>
+入退去があったらズラして数字も振りなおしてね。<br>
+<table>
+  <tr>
+    <th>住人のtwitterID</th>
+    <th>順番</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @members.each do |member| %>
+      <tr>
+        <td><%= member.user %></td>
+        <td><%= member.jyunban_id %></td>
+        <td><%= link_to '詳細', member %></td>
+        <td><%= link_to '編集', edit_member_path(member) %></td>
+        <td><%= link_to '削除', member, confirm: '本当に削除していいですか？', method: :delete %></td>
+      </tr>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to '新しい住人を追加', new_member_path %>
+<%= link_to '戻る', :controller =>'contents' %>

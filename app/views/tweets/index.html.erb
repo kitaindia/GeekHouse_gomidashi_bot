@@ -1,0 +1,27 @@
+<h1>Listing tweets</h1>
+Sun,Mon,Tue,Wed,Thu,Fri,Satって感じでWeekのは振ってね。<br>
+書かれた曜日のが、その日の晩につぶやく内容になってるよ。<br>
+<table>
+  <tr>
+    <th>ツイート内容</th>
+    <th>曜日</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tweets.each do |tweet| %>
+  <tr>
+    <td><%= tweet.message %></td>
+    <td><%= tweet.week %></td>
+    <td><%= link_to '詳細', tweet %></td>
+    <td><%= link_to '編集', edit_tweet_path(tweet) %></td>
+    <td><%= link_to '削除', tweet, confirm: '本当に削除しますか？', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to '新しいメッセージを作成', new_tweet_path %>
+<%= link_to '戻る', :controller =>'contents' %>

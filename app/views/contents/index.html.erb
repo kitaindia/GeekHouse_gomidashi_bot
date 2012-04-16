@@ -1,0 +1,87 @@
+<HEAD>
+  <div id="user_nav">
+    <% if current_user %>
+        <%= current_user.name %>さん <%= link_to "ログアウト" ,logout_path %>
+    <% else %>
+        <%= link_to "Twitterでlogin","/auth/twitter" %>
+    <% end %>
+    <%= link_to('メンバーを編集',{:controller =>'members'}) %>
+    <%= link_to('ツイート内容を編集',{:controller =>'tweets'}) %>
+    <%= link_to('順番をずらす。',{:controller =>'contents',:action =>'roll'}) %>　※当番がずれていたら直してやってください。
+  </div>
+<h1>しんまるこたんBOT</h1>
+<% t =Time.now.beginning_of_week(start_day = :sunday) %>
+今日の当番は、<%= @member.user %>さん。
+<br>
+つぶやく内容は「@<%=@member.user%> さん、<%= @tweet.message %>」だよん
+<br>
+<br>
+</HEAD>
+<BODY>
+<% if current_user == nil %>
+  <%= 'ログインしたら色んな機能がつかえるよ' %>
+  <% elsif current_user.name != @member.user %>
+  <%= '今週はあなたの当番じゃないよ' %>
+  <% elsif current_user.name == @member.user %>
+    <%= '今週はあなたが当番だよ！　代わってもらう？　でも、一回貸しだよん！' %>
+　　<br>
+　　<br>
+　<%= form_for(@task) do |f| %>
+  　<div class="field">
+    <%= f.hidden_field :who,{:value => current_user.name} %>
+    <%= f.collection_select(:for,Member.all,:user,:user) %>さんに<br>
+    <%= f.select(:when,
+    [[t.strftime("%d日 %a"),t],
+    [1.days.since(t).strftime("%d日 %a"),1.days.since(t)],
+    [2.days.since(t).strftime("%d日 %a"),2.days.since(t)],
+    [3.days.since(t).strftime("%d日 %a"),3.days.since(t)],
+    [4.days.since(t).strftime("%d日 %a"),4.days.since(t)],
+    [5.days.since(t).strftime("%d日 %a"),5.days.since(t)],
+    [6.days.since(t).strftime("%d日 %a"),6.days.since(t)],
+     ]) %>
+    <%= 'のゴミ出しをかわってもらう！' %><br>
+  　</div>
+  　<div class="actions">
+  　<%= f.submit '決定',:confirm=>'これでいいですか？'  %>
+  　</div>
+　<% end %>
+<% end %>
+    
+
+<TABLE border="1">
+<tr>
+  <th>ギー丸子メンバー</th>
+  <th>今週の当番</th>
+</tr>
+<% @mem_list.each do |f| %>
+<tr>
+<td><%= f.user %></td>
+<td>
+  <% if f.jyunban_id ==1 %>
+      <%= '<=' %>
+  <% else %>
+  <% end %>
+</td>
+</tr>
+<% end %>
+</TABLE>
+<br>
+
+
+<br>
+</BODY>
+<FOOTER>
+<% if current_user %>
+  <% @tasks.each do |f| %>
+  今あなたは<%= f.when.strftime("%m月%d日") %>に<%= f.for %>さんに、当番を代わってもらってます。<%= f.for %>さんが当番の時に代わってあげてね！
+          <%= link_to 'タスクを完了',f, confirm: 'このタスクを消しますか？', method: :delete %>
+          <br>
+  <% end %>
+          <br><br>
+  <% @tasks_forMe.each do |f| %>
+  今あなたは<%= f.when.strftime("%m月%d日") %>に<%= f.who %>さんに、当番をお願いされてます。OKならよろしくね！　やり終わったらこのタスクをけしてね
+           <%= link_to 'タスクを完了',f, confirm: 'このタスクを消しますか？',method: :delete %>
+          <br>
+  <% end %>
+<% end %>
+</FOOTER>
