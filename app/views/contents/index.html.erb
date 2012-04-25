@@ -9,11 +9,11 @@
     <%= link_to('ツイート内容を編集',{:controller =>'tweets'}) %>
     <%= link_to('順番をずらす。',{:controller =>'contents',:action =>'roll'}) %>　※当番がずれていたら直してやってください。
   </div>
-<h1>しんまるこたんBOT</h1>
+<h1>ギークハウスごみだしbot君</h1>
 <% t =Time.now.beginning_of_week(start_day = :sunday) %>
 今日の当番は、<%= @member.user %>さん。
 <br>
-つぶやく内容は「@<%=@member.user%> さん、<%= @tweet.message %>」だよん
+今日つぶやく内容は「@<%=@member.user%> さん、<%= @tweet.message %>」だよん
 <br>
 <br>
 </HEAD>
@@ -50,7 +50,7 @@
 
 <TABLE border="1">
 <tr>
-  <th>ギー丸子メンバー</th>
+  <th>ギークハウス○○のメンバー</th>
   <th>今週の当番</th>
 </tr>
 <% @mem_list.each do |f| %>
